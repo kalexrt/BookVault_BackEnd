@@ -5,8 +5,7 @@ export interface User {
     password?: string;
     age?: number;
     gender?: string;
-    total_books_borrowed?: number;
-    permissions?:string[];
+    roles?:string[];
   }
   
   export interface getUserQuery {

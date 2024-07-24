@@ -1,13 +1,21 @@
 import express from 'express';
 import config from './config';
 import helmet from 'helmet';
-import cors from 'cors';
+import router from "./routes/index.routes";
+import { errorHandler } from './middlewares/errorHandler.middleware';
+import { requestLogger } from "./middlewares/logger.middleware";
+
 
 const app = express();
 
 app.use(helmet());
 
 app.use(express.json());
+
+app.use(requestLogger);
+app.use(router);
+
+app.use(errorHandler);
 
 
 app.listen(config.port, () => {
