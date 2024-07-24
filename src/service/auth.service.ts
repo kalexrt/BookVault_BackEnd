@@ -13,7 +13,7 @@ const logger = loggerWithNameSpace ("AuthService");
 export async function login(body: Pick<User, "email" | "password">) {
 
     if(!body.email || !body.password) {
-        throw new BadRequestError("Email and password are dead");
+        throw new BadRequestError("Email and password are required");
     }
 
   logger.info("Called login")
@@ -33,20 +33,19 @@ export async function login(body: Pick<User, "email" | "password">) {
   const payload = {
     id: existingUser.id,
     name: existingUser.name,
-    email: existingUser.email,
-    permissions: existingUser.permissions,
+    email: existingUser.email
   };
 
-  const accessToken = await sign(payload, config.jwt.secret!, {
+  const accessToken = await sign(payload, config.jwt.secret, {
     expiresIn: config.jwt.accessTokenExpiryMS,
   });
 
-  const refreshToken = await sign(payload, config.jwt.secret!, {
-    expiresIn: config.jwt.refreshTokenExpiryMS,
-  });
+  // const refreshToken = await sign(payload, config.jwt.secret!, {
+  //   expiresIn: config.jwt.refreshTokenExpiryMS,
+  // });
 
   return {
     accessToken,
-    refreshToken,
+    // refreshToken,
   };
 }

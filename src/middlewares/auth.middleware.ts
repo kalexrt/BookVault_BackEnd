@@ -5,6 +5,7 @@ import config from "../config";
 import { User } from "../interfaces/user.interface";
 import { Request } from "../interfaces/request.interface";
 import { UnauthenticatedError } from "../error/Error";
+import { getUserByEmail } from "../service/user.service";
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const { authorization } = req.headers;
@@ -22,7 +23,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
   }
 
   try {
-    const user = verify(token[1], config.jwt.secret!) as User;
+    const user = verify(token[1], config.jwt.secret) as User;
     req.user = user;
     next();
   }catch(e){
@@ -31,12 +32,13 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 }
 
 export function authorize(role: string){
-  return (req: Request, res: Response, next: NextFunction) =>{
-    const user = req.user!;
+  return async (req: Request, res: Response, next: NextFunction) =>{
+    const user_email = req.user.email;
+    const user = await getUserByEmail(user_email);
+    console.log(user.roles);
     if(!user.roles.includes(role)) {
       next(new UnauthenticatedError("Forbidden"));
     }
-
     next();
   }
 }

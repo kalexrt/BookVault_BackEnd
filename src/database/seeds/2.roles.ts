@@ -14,7 +14,7 @@ export function seed(knex: Knex): Promise<void> {
     .then(() => {
       return knex(TABLE_NAME).insert([
         {
-          name: 'Superadmin'
+          name: 'SuperAdmin'
         },
         {
           name: 'Librarian'

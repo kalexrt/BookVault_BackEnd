@@ -77,3 +77,13 @@ export async function deleteUserById(req: Request<{ id: string }>, res: Response
     next(error);
   }
 }
+
+//delete your own id
+
+export async function deleteSelf(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.status(HttpStatusCodes.OK).json(await userService.deleteUserById(+req.user.id));
+  } catch (error) {
+    next(error);
+  }
+}

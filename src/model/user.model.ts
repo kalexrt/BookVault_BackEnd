@@ -43,13 +43,13 @@ export class UserModel extends BaseModel {
     logger.info("Called getByEmail");
 
     const result = await this.queryBuilder()
-      .select("users.id", "users.email", "users.name", "users.password")
+      .select("users.id", "users.email", "users.name", "users.password","users.age","users.gender","users.total_books_borrowed")
       .from("users")
-      .where("users.email", email);
-
-    const permArray = await this.getRoles(result[0].id);
-    result[0].permissions = permArray;
-    return result[0];
+      .where("users.email", email)
+      .first();
+    const roleArray = await this.getRoles(+result.id);
+    result.roles = roleArray;
+    return result;
   }
 
   //get user roles
@@ -60,6 +60,7 @@ export class UserModel extends BaseModel {
       .select("role_id")
       .from("users_roles")
       .where("user_id", id);
+    console.log(roleId);
 
     const roles = await Promise.all(
       roleId.map(async (role) => {
@@ -67,7 +68,7 @@ export class UserModel extends BaseModel {
           .select("name as role")
           .from("roles")
           .where({ id: role.role_id });
-        return result[0].roles;
+        return result[0].role;
       })
     );
     return roles;
