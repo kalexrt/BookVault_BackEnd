@@ -109,12 +109,12 @@ export const updateUserBodySchema = Joi.object({
       }
       return value;
     }),
-  age: Joi.number().min(1).max(100).required().messages({
+  age: Joi.number().min(1).max(100).optional().messages({
     "any.requied": "Id is required",
     "number.min": "Age must be positive",
     "number.max": "Age cannot be over 150",
   }),
-  gender: Joi.string().required().messages({
+  gender: Joi.string().optional().messages({
     "any.required": "gender is required",
   }),
 }).options({ stripUnknown: true });

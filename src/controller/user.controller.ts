@@ -71,6 +71,7 @@ export async function updateUserById(req: Request<{ id: string }>, res: Response
 //delete user by id
 export async function deleteUserById(req: Request<{ id: string }>, res: Response, next:NextFunction){
   try {
+    logger.info("Called deleteUserById");
     const { id } = req.params; //extract the user ID
     res.status(HttpStatusCodes.OK).json(await userService.deleteUserById(parseInt(id))); //delete specific user
   } catch (error) {
@@ -79,10 +80,31 @@ export async function deleteUserById(req: Request<{ id: string }>, res: Response
 }
 
 //delete your own id
-
 export async function deleteSelf(req: Request, res: Response, next: NextFunction) {
   try {
+    logger.info("Called deleteSelf");
     res.status(HttpStatusCodes.OK).json(await userService.deleteUserById(+req.user.id));
+  } catch (error) {
+    next(error);
+  }
+}
+
+//get your own id
+export async function getMyself(req: Request, res: Response, next: NextFunction) {
+  try {
+    logger.info("Called getMyself");
+    res.status(HttpStatusCodes.OK).json(await userService.getUserByEmail(req.user.email));
+  } catch (error) {
+    next(error);
+  }
+}
+
+//update yourself
+export async function updateSelf(req: Request, res: Response, next: NextFunction) {
+  try {
+    logger.info("Called updateSelf");
+    await userService.updateUserById(+req.user.id, req.body, req.user.id);
+    res.status(HttpStatusCodes.OK).json({ message: "User updated" });
   } catch (error) {
     next(error);
   }

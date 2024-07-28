@@ -6,8 +6,13 @@ import { User } from "../interfaces/user.interface";
 import { Request } from "../interfaces/request.interface";
 import { UnauthenticatedError } from "../error/Error";
 import { getUserByEmail } from "../service/user.service";
+import loggerWithNameSpace from "../utils/logger";
+import { log } from "winston";
+
+const logger = loggerWithNameSpace("AuthMiddleware");
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
+  logger.info("Called authenticate");
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -32,10 +37,10 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 }
 
 export function authorize(role: string){
+  logger.info("Called authorize");
   return async (req: Request, res: Response, next: NextFunction) =>{
     const user_email = req.user.email;
     const user = await getUserByEmail(user_email);
-    console.log(user.roles);
     if(!user.roles.includes(role)) {
       next(new UnauthenticatedError("Forbidden"));
     }

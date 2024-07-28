@@ -8,6 +8,8 @@ import {
   updateUserById,
   deleteUserById,
   deleteSelf,
+  getMyself,
+  updateSelf
 } from "../controller/user.controller";
 
 import {
@@ -38,7 +40,10 @@ router
     validateReqBody(createUserBodySchema),
     createUser
   )
-  .delete(authenticate, authorize("Member"), deleteSelf);
+  .delete(authenticate, authorize("Member"), deleteSelf)
+  .put(authenticate, authorize("Member"),validateReqBody(updateUserBodySchema), updateSelf);
+  
+router.route("/self").get(authenticate,authorize("Member"), getMyself);
 
 router
   .route("/:id")
@@ -61,5 +66,6 @@ router
     validateReqParams(userIdSchema),
     deleteUserById
   );
+
 
 export default router;
