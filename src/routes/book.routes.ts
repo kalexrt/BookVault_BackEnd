@@ -10,14 +10,15 @@ import {
 import {
   validateReqBody,
   validateReqParams,
+  validateReqQuery,
 } from "../middlewares/validator.middleware";
-import { bookIdSchema, createBookBodySchema } from "../schema/book.schema";
+import { bookIdSchema, createBookBodySchema, getBookQuerySchema } from "../schema/book.schema";
 
 const router = express.Router();
 
 router
   .route("/")
-  .get()
+  .get(validateReqQuery(getBookQuerySchema))
   .post(
     authenticate,
     authorize("Librarian"),
