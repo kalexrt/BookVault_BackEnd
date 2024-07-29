@@ -1,0 +1,1 @@
+export const defaultUploadField = [{ name: "photo", maxCount: 1 }]
