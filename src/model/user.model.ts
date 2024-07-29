@@ -114,25 +114,4 @@ export class UserModel extends BaseModel {
     }
     return query;
   }
-
-  //create librarian
-  static async createLibrarian(user: User) {
-    logger.info('Called create librarian');
-    const userToCreate = {
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      gender: user.gender,
-      age: user.age
-    };
-
-    const userId = await this.queryBuilder().insert(userToCreate).table("users").returning("id");
-
-    const userRole = {
-      user_id: +userId[0].id, //get id from the array
-      role_id: 2 // for librarians (special access)
-    };
-
-    await this.queryBuilder().insert(userRole).table("users_roles");
-  }
 }

@@ -1,4 +1,4 @@
-import bcrypt, { hash } from "bcryptjs";
+import bcrypt from "bcryptjs";
 import { getUserQuery, User } from "../interfaces/user.interface";
 import * as userModel from "../model/user.model";
 import loggerWithNameSpace from "../utils/logger";
