@@ -24,7 +24,7 @@ import {
   userIdSchema,
 } from "../schema/user.schema";
 
-const router = express();
+const router = express.Router();
 
 router
   .route("/")

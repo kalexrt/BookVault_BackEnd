@@ -37,8 +37,8 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 }
 
 export function authorize(role: string){
-  logger.info("Called authorize");
   return async (req: Request, res: Response, next: NextFunction) =>{
+    logger.info("Called authorize");
     const user_email = req.user.email;
     const user = await getUserByEmail(user_email);
     if(!user.roles.includes(role)) {

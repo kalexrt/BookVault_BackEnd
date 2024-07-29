@@ -3,7 +3,7 @@ import bookRouter from './book.routes';
 import userRouter from './user.routes';
 import authRouter from './auth.routes';
 
-const router = express();
+const router = express.Router();
 
 router.use("/books", bookRouter);
 router.use("/users", userRouter);
