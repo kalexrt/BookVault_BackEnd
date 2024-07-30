@@ -11,7 +11,7 @@ const TABLE_NAME = 'books';
  */
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.alterTable(TABLE_NAME, (table) => {
-    table.string("image_link", 100).nullable();
+    table.string("image_link", 255).nullable();
   });
 }
 
