@@ -85,7 +85,7 @@ export async function updateUserById(
   }
   const password = await bcrypt.hash(updatedUserData.password, 10);
 
-  userModel.UserModel.update(
+  await userModel.UserModel.update(
     id.toString(),
     { ...updatedUserData, password },
     updatedBy

@@ -72,3 +72,29 @@ export const getBookQuerySchema = Joi.object({
     })
     .default(30),
 }).options({ stripUnknown: true });
+
+//updatebook schema
+export const updateBookBodySchema = Joi.object({
+  rating: Joi.number().min(0).max(5).optional().messages({
+    "number.base": "Rating must be a number",
+    "number.min": "Rating must be at least 0",
+    "number.max": "Rating must be at most 5",
+  }),
+  totalReviews: Joi.number().integer().min(0).optional().messages({
+    "number.base": "Total reviews must be a number",
+    "number.integer": "Total reviews must be an integer",
+    "number.min": "Total reviews must be greater than 0",
+  }),
+  totalCopies: Joi.number().integer().min(1).optional().messages({
+    "number.base": "Total copies must be a number",
+    "number.integer": "Total copies must be an integer",
+    "number.min": "Total copies must be at least 1",
+  }),
+  availableCopies: Joi.number().integer().min(0).optional().messages({
+    "number.base": "Available copies must be a number",
+    "number.integer": "Available copies must be an integer",
+    "number.min": "Available copies must be at least 0",
+  }),
+}).options({
+  stripUnknown: true,
+});

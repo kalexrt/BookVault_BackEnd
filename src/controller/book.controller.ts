@@ -7,6 +7,7 @@ import { getBookQuery } from "../interfaces/book.interface";
 
 const logger = loggerWithNameSpace("BookController");
 
+//get books
 export async function getBooks(
   req: Request<any, any, any, getBookQuery>,
   res: Response,
@@ -22,6 +23,7 @@ export async function getBooks(
   }
 }
 
+//create book
 export async function createBook(
   req: Request<{ id: string }>,
   res: Response,
@@ -42,6 +44,7 @@ export async function createBook(
   }
 }
 
+//get book by id
 export async function getBookById(
   req: Request<{ id: string }>,
   res: Response,
@@ -57,6 +60,24 @@ export async function getBookById(
   }
 }
 
+//update book by id
+export async function updateBookById(
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    logger.info("Called updateBookById");
+    const { id } = req.params;
+    const { body } = req;
+    await bookService.updateBookById(id, body, req.user.id);
+    res.status(HttpStatusCodes.OK).json({ message: "Book updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+//delete book by id
 export async function deleteBookById(
   req: Request<{ id: string }>,
   res: Response,

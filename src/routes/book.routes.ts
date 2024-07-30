@@ -7,13 +7,19 @@ import {
   deleteBookById,
   getBookById,
   getBooks,
+  updateBookById,
 } from "../controller/book.controller";
 import {
   validateReqBody,
   validateReqParams,
   validateReqQuery,
 } from "../middlewares/validator.middleware";
-import { bookIdSchema, createBookBodySchema, getBookQuerySchema } from "../schema/book.schema";
+import {
+  bookIdSchema,
+  createBookBodySchema,
+  getBookQuerySchema,
+  updateBookBodySchema,
+} from "../schema/book.schema";
 
 const router = express.Router();
 
@@ -31,7 +37,13 @@ router
 router
   .route("/:id")
   .get(validateReqParams(bookIdSchema), getBookById)
-  .put()
+  .put(
+    authenticate,
+    authorize("Librarian"),
+    validateReqParams(bookIdSchema),
+    validateReqBody(updateBookBodySchema),
+    updateBookById
+  )
   .delete(
     authenticate,
     authorize("Librarian"),
