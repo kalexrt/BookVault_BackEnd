@@ -6,6 +6,7 @@ import {
   createBook,
   deleteBookById,
   getBookById,
+  getBooks,
 } from "../controller/book.controller";
 import {
   validateReqBody,
@@ -18,7 +19,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(validateReqQuery(getBookQuerySchema))
+  .get(validateReqQuery(getBookQuerySchema), getBooks)
   .post(
     authenticate,
     authorize("Librarian"),

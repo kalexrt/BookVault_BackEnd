@@ -1,4 +1,4 @@
-import { Book } from "../interfaces/book.interface";
+import { Book, getBookQuery } from "../interfaces/book.interface";
 import loggerWithNameSpace from "../utils/logger";
 import { BaseModel } from "./Base.model";
 
@@ -64,26 +64,86 @@ export class BookModel extends BaseModel {
     }
   }
 
- //get book by id
-static async getBookById(id: string) {
+  //get book by id
+  static async getBookById(id: string) {
     return await this.queryBuilder()
-        .select(
-            "books.*",
-            this.queryBuilder().raw('array_agg(distinct authors.name) as authors'),
-            this.queryBuilder().raw('array_agg(distinct genres.name) as genres')
-        )
-        .from("books")
-        .leftJoin("books_authors", "books.id", "books_authors.book_id")
-        .leftJoin("authors", "authors.id", "books_authors.author_id")
-        .leftJoin("books_genres", "books.id", "books_genres.book_id")
-        .leftJoin("genres", "genres.id", "books_genres.genre_id")
-        .where("books.id", id)
-        .groupBy("books.id")
-        .first();
-}
+      .select(
+        "books.*",
+        this.queryBuilder().raw("array_agg(distinct authors.name) as authors"),
+        this.queryBuilder().raw("array_agg(distinct genres.name) as genres")
+      )
+      .from("books")
+      .leftJoin("books_authors", "books.id", "books_authors.book_id")
+      .leftJoin("authors", "authors.id", "books_authors.author_id")
+      .leftJoin("books_genres", "books.id", "books_genres.book_id")
+      .leftJoin("genres", "genres.id", "books_genres.genre_id")
+      .where("books.id", id)
+      .groupBy("books.id")
+      .first();
+  }
 
   //delete book by id
   static async deleteBookById(id: string) {
     await this.queryBuilder().from("books").where({ id }).del();
+  }
+
+  //get books
+  static getBooks(filter: getBookQuery) {
+    const { title, genre, isbn, author, page = 1, size = 16 } = filter;
+    const query = this.queryBuilder()
+      .select(
+        "books.*",
+        this.queryBuilder().raw("array_agg(distinct authors.name) as authors"),
+        this.queryBuilder().raw("array_agg(distinct genres.name) as genres")
+      )
+      .from("books")
+      .leftJoin("books_authors", "books.id", "books_authors.book_id")
+      .leftJoin("authors", "authors.id", "books_authors.author_id")
+      .leftJoin("books_genres", "books.id", "books_genres.book_id")
+      .leftJoin("genres", "genres.id", "books_genres.genre_id")
+      .groupBy("books.id")
+      .limit(size!)
+      .offset((page! - 1) * size!);
+
+    if (title) {
+      query.where("books.title", "like", `%${title}%`);
+    }
+    if (isbn) {
+      query.where("books.isbn", "like", `%${isbn}%`);
+    }
+    if (author) {
+      query.where("authors.name", "like", `%${author}%`);
+    }
+    if (genre) {
+      query.where("genres.name", "like", `%${genre}%`);
+    }
+
+    return query;
+  }
+
+  //count books
+  static count(filter: getBookQuery) {
+    const { title, genre, isbn, author } = filter;
+    const query = this.queryBuilder()
+    .countDistinct("books.id as count")
+    .from("books")
+    .leftJoin("books_authors", "books.id", "books_authors.book_id")
+    .leftJoin("authors", "authors.id", "books_authors.author_id")
+    .leftJoin("books_genres", "books.id", "books_genres.book_id")
+    .leftJoin("genres", "genres.id", "books_genres.genre_id");
+
+    if (title) {
+      query.where("books.title", "like", `%${title}%`);
+    }
+    if (isbn) {
+      query.where("books.isbn", "like", `%${isbn}%`);
+    }
+    if (author) {
+      query.where("authors.name", "like", `%${author}%`);
+    }
+    if (genre) {
+      query.where("genres.name", "like", `%${genre}%`);
+    }
+    return query.first();
   }
 }
