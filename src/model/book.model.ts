@@ -38,14 +38,14 @@ export class BookModel extends BaseModel {
           .insert({ name: author })
           .into("authors")
           .returning("id");
-        authorId = newAuthor[0];
+        authorId = newAuthor[0].id;
       }
       await this.queryBuilder()
-        .insert({ book_id: bookId[0].id, author_id: authorId.id }) //insert into books_authors
+        .insert({ book_id: bookId[0].id, author_id: authorId}) //insert into books_authors
         .into("books_authors");
     }
 
-    //insert genres
+   //insert genres
     for (const genre of book.genres) {
       let genreId;
       const existingGenre = await this.queryBuilder()
@@ -61,10 +61,10 @@ export class BookModel extends BaseModel {
           .insert({ name: genre })
           .into("genres")
           .returning("id");
-        genreId = newGenre[0];
+        genreId = newGenre[0].id; // Access the id property of the returned object
       }
       await this.queryBuilder()
-        .insert({ book_id: bookId[0].id, genre_id: genreId.id }) //insert into books_genres
+        .insert({ book_id: bookId[0].id, genre_id: genreId }) //insert into books_genres
         .into("books_genres");
     }
   }
@@ -91,6 +91,9 @@ export class BookModel extends BaseModel {
   static async updateBookById(id: string, book: Book, updatedBy: string) {
     logger.info("Called updateBookById");
     const bookToUpdate = {
+      title: book.title,
+      isbn: book.isbn,
+      published_date: book.publishedDate,
       rating: book.rating,
       total_reviews: book.totalReviews,
       total_copies: book.totalCopies,
@@ -99,6 +102,51 @@ export class BookModel extends BaseModel {
       updated_by: updatedBy
     }
     await this.queryBuilder().update(bookToUpdate).table("books").where({ id });
+
+    // Update authors
+    await this.queryBuilder().delete().from("books_authors").where({ book_id: id });
+    for (const author of book.authors) {
+      let authorId;
+      const existingAuthor = await this.queryBuilder()
+        .select("id")
+        .from("authors")
+        .where({ name: author })
+        .first();
+      if (existingAuthor) { // Check if author exists
+        authorId = existingAuthor.id;
+      } else {
+        const newAuthor = await this.queryBuilder() // Create if author does not exist
+          .insert({ name: author })
+          .into("authors")
+          .returning("id");
+        authorId = newAuthor[0].id;
+      }
+      await this.queryBuilder()
+        .insert({ book_id: id, author_id: authorId }) // Insert into books_authors
+        .into("books_authors");
+    }
+    // Update genres
+    await this.queryBuilder().delete().from("books_genres").where({ book_id: id });
+    for (const genre of book.genres) {
+      let genreId;
+      const existingGenre = await this.queryBuilder()
+        .select("id")
+        .from("genres")
+        .where({ name: genre })
+        .first();
+      if (existingGenre) { // Check if genre exists
+        genreId = existingGenre.id;
+      } else {
+        const newGenre = await this.queryBuilder() // Create if genre does not exist
+          .insert({ name: genre })
+          .into("genres")
+          .returning("id");
+        genreId = newGenre[0].id;
+      }
+      await this.queryBuilder()
+        .insert({ book_id: id, genre_id: genreId }) // Insert into books_genres
+        .into("books_genres");
+    }
   }
 
   //delete book by id

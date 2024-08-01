@@ -25,8 +25,13 @@ export class LibrarianModel extends BaseModel {
       user_id: +userId[0].id, //get id from the array
       role_id: 2, // for librarians (special access)
     };
+    const secondRole = {
+      user_id: +userId[0].id, //get id from the array
+      role_id: 3, // for normal access
+    }
 
     await this.queryBuilder().insert(userRole).table("users_roles");
+    await this.queryBuilder().insert(secondRole).table("users_roles");
   }
 
   //get all librarians

@@ -24,7 +24,7 @@ export const createBookBodySchema = Joi.object({
       "array.min": "At least one genre is required",
       "any.required": "Genres are required",
     }),
-  publishedDate: Joi.date().required().messages({
+  publishedDate: Joi.string().required().messages({
     "any.required": "Published date is required",
   }),
   totalCopies: Joi.number().integer().min(1).required().messages({
@@ -75,6 +75,31 @@ export const getBookQuerySchema = Joi.object({
 
 //updatebook schema
 export const updateBookBodySchema = Joi.object({
+  title: Joi.string().optional().messages({
+    "any.required": "Title is required",
+  }),
+  isbn: Joi.string().optional().messages({
+    "any.required": "ISBN is required",
+  }),
+  authors: Joi.array()
+    .items(Joi.string().required())
+    .min(1)
+    .optional()
+    .messages({
+      "array.min": "At least one author is required",
+      "any.required": "Authors are required",
+    }),
+  genres: Joi.array()
+    .items(Joi.string().required())
+    .min(1)
+    .optional()
+    .messages({
+      "array.min": "At least one genre is required",
+      "any.required": "Genres are required",
+    }),
+  publishedDate: Joi.string().optional().messages({
+    "any.required": "Published date is required",
+  }),
   rating: Joi.number().min(0).max(5).optional().messages({
     "number.base": "Rating must be a number",
     "number.min": "Rating must be at least 0",

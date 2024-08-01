@@ -24,7 +24,7 @@ router
   .get(
     authenticate,
     authorize("SuperAdmin"),
-    validateReqParams(getUserQuerySchema),
+    validateReqQuery(getUserQuerySchema),
     getLibrarians
   )
   .post(
@@ -33,8 +33,6 @@ router
     validateReqBody(createUserBodySchema),
     createLibrarian
   )
-  .delete(authenticate, authorize("Librarian"), deleteSelf);
-
-router.route("/:id").put();
+  .delete(authenticate, authorize("SuperAdmin"), deleteSelf);
 
 export default router;

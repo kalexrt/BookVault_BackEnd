@@ -49,13 +49,13 @@ router
   .route("/:id")
   .get(
     authenticate,
-    authorize("Librarian"),
+    authorize("SuperAdmin"),
     validateReqParams(userIdSchema),
     getUserById
   )
   .put(
     authenticate,
-    authorize("Member"),
+    authorize("SuperAdmin"),
     validateReqParams(userIdSchema),
     validateReqBody(updateUserBodySchema),
     updateUserById

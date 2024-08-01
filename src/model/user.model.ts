@@ -7,20 +7,23 @@ const logger = loggerWithNameSpace("UserModel");
 export class UserModel extends BaseModel {
   //create user
   static async create(user: User) {
-    logger.info('Called create');
+    logger.info("Called create");
     const userToCreate = {
       name: user.name,
       email: user.email,
       password: user.password,
       gender: user.gender,
-      age: user.age
+      age: user.age,
     };
 
-    const userId = await this.queryBuilder().insert(userToCreate).table("users").returning("id");
+    const userId = await this.queryBuilder()
+      .insert(userToCreate)
+      .table("users")
+      .returning("id");
 
     const userRole = {
       user_id: +userId[0].id, //get id from the array
-      role_id: 3 // for normal users(member role)
+      role_id: 3, // for normal users(member role)
     };
 
     await this.queryBuilder().insert(userRole).table("users_roles");
@@ -32,10 +35,10 @@ export class UserModel extends BaseModel {
       name: user.name,
       email: user.email,
       password: user.password,
-      age:user.age,
-      gender:user.gender,
+      age: user.age,
+      gender: user.gender,
       updated_at: new Date(),
-      updated_by: updatedBy
+      updated_by: updatedBy,
     };
     await this.queryBuilder().update(userToUpdate).table("users").where({ id });
   }
@@ -45,7 +48,16 @@ export class UserModel extends BaseModel {
     logger.info("Called getByEmail");
 
     const result = await this.queryBuilder()
-      .select("users.id", "users.email", "users.name", "users.password","users.age","users.gender","users.total_books_borrowed","created_at")
+      .select(
+        "users.id",
+        "users.email",
+        "users.name",
+        "users.password",
+        "users.age",
+        "users.gender",
+        "users.total_books_borrowed",
+        "created_at"
+      )
       .from("users")
       .where("users.email", email)
       .first();
@@ -63,7 +75,6 @@ export class UserModel extends BaseModel {
       .from("users_roles")
       .where("user_id", id);
 
-
     const roles = await Promise.all(
       roleId.map(async (role) => {
         const result = await this.queryBuilder()
@@ -77,12 +88,12 @@ export class UserModel extends BaseModel {
   }
 
   //get user by id
-  static async getUserById(id: string){
+  static async getUserById(id: string) {
     return await this.queryBuilder()
-    .select('*')
-    .from('users')
-    .where({id})
-    .first();
+      .select("*")
+      .from("users")
+      .where({ id })
+      .first();
   }
 
   //delete the user by the id
@@ -95,10 +106,22 @@ export class UserModel extends BaseModel {
   static getUsers(filter: getUserQuery) {
     const { q, page, size } = filter;
     const query = this.queryBuilder()
-      .select("id", "email", "name","age","gender","total_books_borrowed")
-      .table("users")
+      .select(
+        "users.id",
+        "users.email",
+        "users.name",
+        "users.age",
+        "users.gender",
+        "users.total_books_borrowed",
+        this.queryBuilder().raw("array_agg(distinct roles.name) as roles")
+      )
+      .from("users")
+      .leftJoin("users_roles", "users.id", "users_roles.user_id")
+      .leftJoin("roles", "users_roles.role_id", "roles.id")
+      .groupBy("users.id")
       .limit(size!)
       .offset((page! - 1) * size!);
+
     if (q) {
       query.whereLike("name", `%${q}%`);
     }

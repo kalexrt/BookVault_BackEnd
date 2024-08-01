@@ -31,6 +31,10 @@ export function seed(knex: Knex): Promise<void> {
         },
         {
           role_id: 3,
+          user_id: 2
+        },
+        {
+          role_id: 3,
           user_id: 3
         },
         {

@@ -13,12 +13,12 @@ export const getUserQuerySchema = Joi.object({
     .default(1),
   size: Joi.number()
     .min(1)
-    .max(10)
+    .max(30)
     .optional()
     .messages({
       "number.base": "Size must be a number",
       "number.min": "Size must be at least 1",
-      "number.max": "Size must be at most 10",
+      "number.max": "Size must be at most 30",
     })
     .default(10),
 }).options({ stripUnknown: true });
