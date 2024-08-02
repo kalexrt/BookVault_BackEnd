@@ -2,14 +2,11 @@ import express from "express";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
 import {
   validateReqBody,
-  validateReqParams,
   validateReqQuery,
 } from "../middlewares/validator.middleware";
 import {
   createUserBodySchema,
   getUserQuerySchema,
-  updateUserBodySchema,
-  userIdSchema,
 } from "../schema/user.schema";
 import {
   createLibrarian,

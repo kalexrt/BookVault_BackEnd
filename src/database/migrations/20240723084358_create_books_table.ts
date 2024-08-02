@@ -13,12 +13,13 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable(TABLE_NAME, (table) => {
     table.bigIncrements();
     table.string('title').notNullable();
-    table.bigInteger('isbn').notNullable().unique().unsigned();
+    table.string('isbn').notNullable().unique();
     table.date('published_date').notNullable();
     table.integer('rating').defaultTo(0);
     table.integer('total_reviews').defaultTo(0);
     table.integer('total_copies').notNullable().defaultTo(1);
     table.integer('available_copies').notNullable().defaultTo(1);
+    table.string("image_link", 255).nullable();
 
 
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));

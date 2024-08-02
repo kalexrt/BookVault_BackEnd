@@ -77,7 +77,7 @@ export function seed(knex: Knex): Promise<void> {
           "created_by": 1,
         },
         {
-          "title": "Harry Potter and the Sorcerer's Stone",
+          "title": "Harry Potter and the Sorcerers Stone",
           "isbn": "978-0439708180",
           "published_date": "1997-06-26",
           "total_copies": 10,
@@ -167,7 +167,7 @@ export function seed(knex: Knex): Promise<void> {
           "created_by": 1,
         },
         {
-          "title": "The Hitchhiker's Guide to the Galaxy",
+          "title": "The Hitchhikers Guide to the Galaxy",
           "isbn": "978-0345391803",
           "published_date": "1979-10-12",
           "total_copies": 4,
