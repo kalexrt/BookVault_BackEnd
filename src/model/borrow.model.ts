@@ -1,3 +1,4 @@
+import { NotFoundError } from "../error/Error";
 import { Borrow, getBorrowQuery } from "../interfaces/borrow.interface";
 import { BaseModel } from "./Base.model";
 
@@ -12,7 +13,7 @@ export class BorrowModel extends BaseModel {
     await this.queryBuilder().insert(dataToInsert).table("users_issued_books");
   }
   //get all borrows
-  static getBorrows(filter: getBorrowQuery) {
+  static async getBorrows(filter: getBorrowQuery) {
     const { page, size, book, user } = filter;
     const query = this.queryBuilder()
       .select(
@@ -61,14 +62,22 @@ export class BorrowModel extends BaseModel {
   }
 
   //return book
-  static returnBook(id: string, updatedBy: string) {
-    return this.queryBuilder()
+  static async returnBook(id: string, updatedBy: string) {
+    const result = await this.queryBuilder()
       .table("users_issued_books")
       .where("id", id)
+      .where("is_returned", false)
       .update({
         returned_date: new Date(),
+        updated_at: new Date(),
         updated_by: updatedBy,
         is_returned: true,
       });
+
+    if (result === 0) {
+      // Handle the case where no rows were updated (i.e., the book was already returned or doesn't exist)
+      throw new NotFoundError("No matching record found or the book is already returned.");
+    }
+    return result;
   }
 }
