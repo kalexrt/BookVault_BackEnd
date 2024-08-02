@@ -20,7 +20,7 @@ export class BorrowModel extends BaseModel {
         "users_issued_books.*",
         "users.name as user_name",
         "books.title as book_title"
-      ) 
+      )
       .from("users_issued_books")
       .innerJoin("users", "users_issued_books.user_id", "users.id")
       .innerJoin("books", "users_issued_books.book_id", "books.id")
@@ -76,8 +76,20 @@ export class BorrowModel extends BaseModel {
 
     if (result === 0) {
       // Handle the case where no rows were updated (i.e., the book was already returned or doesn't exist)
-      throw new NotFoundError("No matching record found or the book is already returned.");
+      throw new NotFoundError(
+        "No matching record found or the book is already returned."
+      );
     }
     return result;
+  }
+
+  //get bookid by borrowid
+  static async getBookIdByBorrowId(borrowId: string) {
+    const query = await this.queryBuilder()
+      .select("book_id")
+      .from("users_issued_books")
+      .where("id", borrowId)
+      .first();
+    return query.book_id;
   }
 }

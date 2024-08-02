@@ -103,49 +103,53 @@ export class BookModel extends BaseModel {
     }
     await this.queryBuilder().update(bookToUpdate).table("books").where({ id });
 
-    // Update authors
-    await this.queryBuilder().delete().from("books_authors").where({ book_id: id });
-    for (const author of book.authors) {
-      let authorId;
-      const existingAuthor = await this.queryBuilder()
-        .select("id")
-        .from("authors")
-        .where({ name: author })
-        .first();
-      if (existingAuthor) { // Check if author exists
-        authorId = existingAuthor.id;
-      } else {
-        const newAuthor = await this.queryBuilder() // Create if author does not exist
-          .insert({ name: author })
-          .into("authors")
-          .returning("id");
-        authorId = newAuthor[0].id;
+    if(book.authors){
+      // Update authors
+      await this.queryBuilder().delete().from("books_authors").where({ book_id: id });
+      for (const author of book.authors) {
+        let authorId;
+        const existingAuthor = await this.queryBuilder()
+          .select("id")
+          .from("authors")
+          .where({ name: author })
+          .first();
+        if (existingAuthor) { // Check if author exists
+          authorId = existingAuthor.id;
+        } else {
+          const newAuthor = await this.queryBuilder() // Create if author does not exist
+            .insert({ name: author })
+            .into("authors")
+            .returning("id");
+          authorId = newAuthor[0].id;
+        }
+        await this.queryBuilder()
+          .insert({ book_id: id, author_id: authorId }) // Insert into books_authors
+          .into("books_authors");
       }
-      await this.queryBuilder()
-        .insert({ book_id: id, author_id: authorId }) // Insert into books_authors
-        .into("books_authors");
     }
-    // Update genres
-    await this.queryBuilder().delete().from("books_genres").where({ book_id: id });
-    for (const genre of book.genres) {
-      let genreId;
-      const existingGenre = await this.queryBuilder()
-        .select("id")
-        .from("genres")
-        .where({ name: genre })
-        .first();
-      if (existingGenre) { // Check if genre exists
-        genreId = existingGenre.id;
-      } else {
-        const newGenre = await this.queryBuilder() // Create if genre does not exist
-          .insert({ name: genre })
-          .into("genres")
-          .returning("id");
-        genreId = newGenre[0].id;
+    if(book.genres){
+      // Update genres
+      await this.queryBuilder().delete().from("books_genres").where({ book_id: id });
+      for (const genre of book.genres) {
+        let genreId;
+        const existingGenre = await this.queryBuilder()
+          .select("id")
+          .from("genres")
+          .where({ name: genre })
+          .first();
+        if (existingGenre) { // Check if genre exists
+          genreId = existingGenre.id;
+        } else {
+          const newGenre = await this.queryBuilder() // Create if genre does not exist
+            .insert({ name: genre })
+            .into("genres")
+            .returning("id");
+          genreId = newGenre[0].id;
+        }
+        await this.queryBuilder()
+          .insert({ book_id: id, genre_id: genreId }) // Insert into books_genres
+          .into("books_genres");
       }
-      await this.queryBuilder()
-        .insert({ book_id: id, genre_id: genreId }) // Insert into books_genres
-        .into("books_genres");
     }
   }
 
