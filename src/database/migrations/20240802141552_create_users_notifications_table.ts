@@ -20,7 +20,9 @@ export async function up(knex: Knex): Promise<void> {
       .inTable("users")
       .onDelete("CASCADE");
     table.string('notification_text').notNullable();
+    table.boolean("is_read").notNullable().defaultTo(false);
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
+    table.timestamp('updated_at').nullable();
   });
 }
 

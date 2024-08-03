@@ -4,6 +4,7 @@ import userRouter from './user.routes';
 import authRouter from './auth.routes';
 import libRouter from './librarian.routes';
 import borrowRouter from './borrow.routes';
+import wishListRouter from './wishlist.routes';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.use("/users", userRouter);
 router.use ("/auth", authRouter);
 router.use ("/librarian", libRouter);
 router.use ("/borrows", borrowRouter);
+router.use ("/wishlist", wishListRouter);
 
 
 export default router;

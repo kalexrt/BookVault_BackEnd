@@ -18,7 +18,7 @@ export function seed(knex: Knex): Promise<void> {
           "isbn": "978-0060853983",
           "published_date": "1990-05-10",
           "total_copies": 3,
-          "available_copies": 2,
+          "available_copies": 0,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722272812/images/good_omens.jpg.jpg",
           "created_by": 1,
         },

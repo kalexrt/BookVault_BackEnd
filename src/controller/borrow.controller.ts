@@ -14,7 +14,7 @@ export async function createBorrow(
   next: NextFunction
 ) {
   try {
-    logger.info("Called createUser");
+    logger.info("Called createBorrow");
     const { body } = req;
     await borrowService.createBorrow(body,req.user.id);
     res.status(HttpStatusCodes.OK).json({

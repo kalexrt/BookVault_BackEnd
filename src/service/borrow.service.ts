@@ -3,7 +3,8 @@ import { NotFoundError } from "../error/Error";
 import { Borrow, getBorrowQuery } from "../interfaces/borrow.interface";
 import * as borrowModel from "../model/borrow.model";
 import { BookModel } from "../model/book.model";
-import { Book } from "../interfaces/book.interface";
+import { WishlistModel } from "../model/wishlist.model";
+import { NotificationModel } from "../model/notification.model";
 
 const logger = loggerWithNameSpace("Borrow Service");
 
@@ -35,8 +36,14 @@ export async function createBorrow (borrow: Borrow, createdBy: string){
 //return the book
 export  async function returnBook(id: string, userId: string){
   logger.info("Called returnBook");
-  const bookId = await borrowModel.BorrowModel.getBookIdByBorrowId(id);
-  const book = await BookModel.getBookById(bookId);
-  await BookModel.updateBookById(bookId, { availableCopies: book.available_copies + 1 }, userId);
-  await borrowModel.BorrowModel.returnBook(id, userId);
+  const bookId = await borrowModel.BorrowModel.getBookIdByBorrowId(id); //get book id from borrow id
+  const book = await BookModel.getBookById(bookId); 
+  await BookModel.updateBookById(bookId, { availableCopies: book.available_copies + 1 }, userId); //update the book's available copies
+  await borrowModel.BorrowModel.returnBook(id, userId); //update the borrow book table
+  const wishlistInfo = await WishlistModel.getWishlistIdsByBookId(bookId); //get wishlist ids for the book
+  //deactivate the wishlist and send notification
+  for (const { id, user_id } of wishlistInfo) {
+    await WishlistModel.deactivateWishlist(id);
+    await NotificationModel.addBookAvailableNotification(user_id, book.title);
+  }
 }
