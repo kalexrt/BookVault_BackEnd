@@ -1,6 +1,7 @@
-import { Knex } from "knex";
+import { Knex } from 'knex';
 
-const TABLE_NAME = "users_wishlist";
+const TABLE_NAME = 'users_notifications';
+
 
 /**
  * Create table TABLE_NAME.
@@ -18,28 +19,8 @@ export async function up(knex: Knex): Promise<void> {
       .references("id")
       .inTable("users")
       .onDelete("CASCADE");
-
-    table
-      .integer("book_id")
-      .unsigned()
-      .notNullable()
-      .references("id")
-      .inTable("books")
-      .onDelete("CASCADE");
-
-    table.boolean("is_active").notNullable().defaultTo(true);
-
-    table.timestamp("added_date").notNullable().defaultTo(knex.raw("now()"));
-
-    table.timestamp("updated_at").nullable();
-
-    table
-      .bigInteger("updated_by")
-      .unsigned()
-      .references("id")
-      .inTable("users")
-      .nullable()
-      .onDelete("SET NULL");
+    table.string('notification_text').notNullable();
+    table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
   });
 }
 

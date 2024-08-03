@@ -54,10 +54,9 @@ export const createUserBodySchema = Joi.object({
       }
       return value;
     }),
-  age: Joi.number().min(1).max(100).required().messages({
+  age: Joi.number().min(1).required().messages({
     "any.requied": "Id is required",
     "number.min": "Age must be positive",
-    "number.max": "Age cannot be over 150",
   }),
   gender: Joi.string().required().messages({
     "any.required": "gender is required",
@@ -109,12 +108,8 @@ export const updateUserBodySchema = Joi.object({
       }
       return value;
     }),
-  age: Joi.number().min(1).max(100).optional().messages({
-    "any.requied": "Id is required",
+  age: Joi.number().min(1).optional().messages({
     "number.min": "Age must be positive",
-    "number.max": "Age cannot be over 150",
   }),
-  gender: Joi.string().optional().messages({
-    "any.required": "gender is required",
-  }),
+  gender: Joi.string().optional(),
 }).options({ stripUnknown: true });

@@ -44,10 +44,9 @@ export const registerUserBodySchema = Joi.object({
       }
       return value;
     }),
-  age: Joi.number().min(1).max(100).required().messages({
+  age: Joi.number().min(1).required().messages({
     "any.requied": "Id is required",
     "number.min": "Age must be positive",
-    "number.max": "Age cannot be over 150",
   }),
   gender: Joi.string().required().messages({
     "any.required": "gender is required",

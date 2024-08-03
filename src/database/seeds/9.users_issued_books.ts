@@ -147,6 +147,24 @@ export function seed(knex: Knex): Promise<void> {
           "due_date": "2024-08-04T22:00:00.000Z",
           "returned_date": null,
           "created_by": 1,
+        },
+        {
+          "book_id": 1,
+          "user_id": 4,
+          "is_returned": false,
+          "issued_date": "2024-07-28T22:00:00.000Z",
+          "due_date": "2024-08-04T22:00:00.000Z",
+          "returned_date": null,
+          "created_by": 1,
+        },
+        {
+          "book_id": 1,
+          "user_id": 5,
+          "is_returned": false,
+          "issued_date": "2024-07-28T22:00:00.000Z",
+          "due_date": "2024-08-04T22:00:00.000Z",
+          "returned_date": null,
+          "created_by": 1,
         }
       ]);
     });
