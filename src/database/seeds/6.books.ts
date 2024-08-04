@@ -27,16 +27,18 @@ export function seed(knex: Knex): Promise<void> {
           "isbn": "978-0525478812",
           "published_date": "2012-01-10",
           "total_copies": 5,
-          "available_copies": 5,
+          "available_copies": 4,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325616/fault_in_our_stars_qxhhia.jpg",
           "created_by": 1,
+          "rating": 5,
+          "total_reviews": 1
         },
         {
           "title": "To Kill a Mockingbird",
           "isbn": "978-0061120084",
           "published_date": "1960-07-11",
           "total_copies": 4,
-          "available_copies": 3,
+          "available_copies": 2,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325624/to_kill_a_mocking_bird_kfwukc.jpg",
           "created_by": 1,
         },
@@ -45,7 +47,7 @@ export function seed(knex: Knex): Promise<void> {
           "isbn": "978-0451524935",
           "published_date": "1949-06-08",
           "total_copies": 6,
-          "available_copies": 5,
+          "available_copies": 4,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325615/1984_qfgoxs.jpg",
           "created_by": 1,
         },
@@ -54,16 +56,18 @@ export function seed(knex: Knex): Promise<void> {
           "isbn": "978-1503290563",
           "published_date": "1813-01-28",
           "total_copies": 3,
-          "available_copies": 3,
+          "available_copies": 2,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325616/pride_and_prejudice_xagvkg.jpg",
           "created_by": 1,
+          "rating": 3,
+          "total_reviews": 1
         },
         {
           "title": "The Great Gatsby",
           "isbn": "978-0743273565",
           "published_date": "1925-04-10",
           "total_copies": 4,
-          "available_copies": 3,
+          "available_copies": 2,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325620/the_great_gatsby_mnmpw3.jpg",
           "created_by": 1,
         },
@@ -75,6 +79,8 @@ export function seed(knex: Knex): Promise<void> {
           "available_copies": 5,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325620/the_hobbit_gpf8gc.jpg",
           "created_by": 1,
+          "rating": 4,
+          "total_reviews": 1
         },
         {
           "title": "Harry Potter and the Sorcerers Stone",
@@ -93,6 +99,8 @@ export function seed(knex: Knex): Promise<void> {
           "available_copies": 4,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325618/the_catcher_in_the_rye_gbq4zj.jpg",
           "created_by": 1,
+          "rating": 3,
+          "total_reviews": 1
         },
         {
           "title": "Moby Dick",
@@ -111,6 +119,8 @@ export function seed(knex: Knex): Promise<void> {
           "available_copies": 4,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325616/brave_new_world_drivms.jpg",
           "created_by": 1,
+          "rating": 2,
+          "total_reviews": 1
         },
         {
           "title": "The Shining",
@@ -138,6 +148,8 @@ export function seed(knex: Knex): Promise<void> {
           "available_copies": 4,
           "image_link": "https://res.cloudinary.com/dpkvoohfd/image/upload/v1722325621/the_road_mojb9x.jpg",
           "created_by": 1,
+          "rating": 1,
+          "total_reviews": 1
         },
         {
           "title": "A Game of Thrones",

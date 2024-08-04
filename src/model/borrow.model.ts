@@ -92,4 +92,12 @@ export class BorrowModel extends BaseModel {
       .first();
     return query.book_id;
   }
+
+  //update is reviewed
+  static async updateIsReviewed(borrowId: string) {
+    await this.queryBuilder()
+      .table("users_issued_books")
+      .where("id", borrowId)
+      .update({ is_reviewed: true });
+  }
 }

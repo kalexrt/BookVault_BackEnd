@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('title').notNullable();
     table.string('isbn').notNullable().unique();
     table.date('published_date').notNullable();
-    table.integer('rating').defaultTo(0);
+    table.float('rating', 2, 1).defaultTo(0.0);
     table.integer('total_reviews').defaultTo(0);
     table.integer('total_copies').notNullable().defaultTo(1);
     table.integer('available_copies').notNullable().defaultTo(1);

@@ -28,6 +28,7 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("CASCADE");
 
     table.boolean('is_returned').notNullable().defaultTo(false);
+    table.boolean('is_reviewed').notNullable().defaultTo(false);
 
     table.timestamp('issued_date').notNullable().defaultTo(knex.raw('now()'));
     table.timestamp('due_date').notNullable().defaultTo(knex.raw(`now() + INTERVAL '7 days'`));

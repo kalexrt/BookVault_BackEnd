@@ -27,7 +27,6 @@ export async function up(knex: Knex): Promise<void> {
       .inTable("users")
       .onDelete("CASCADE");
     table.integer('rating').notNullable();
-    table.text('review_text').notNullable();
 
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
   });
