@@ -20,6 +20,7 @@ export class NotificationModel extends BaseModel{
             .select("*")
             .from("users_notifications")
             .where("user_id", userId)
+            .where("is_read", false)
             .orderBy("created_at", "desc");
     }
 
