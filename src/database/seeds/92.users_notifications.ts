@@ -17,6 +17,14 @@ export function seed(knex: Knex): Promise<void> {
           user_id: 3,
           notification_text: "Pride and Prejudice is now available",
         },
+        {
+          user_id: 3,
+          notification_text: "Good Omens is now available",
+        },
+        {
+          user_id: 3,
+          notification_text: "The Hobbit is now available",
+        },
       ]);
     });
 }
