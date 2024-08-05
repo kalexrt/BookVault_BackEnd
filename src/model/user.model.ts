@@ -46,7 +46,6 @@ export class UserModel extends BaseModel {
   //get user by email
   static async getByEmail(email: string) {
     logger.info("Called getByEmail");
-
     const result = await this.queryBuilder()
       .select(
         "users.id",
